@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="preferExternal"
+    package="com.android.kk.bike">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!--<uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"/>-->
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.SET_TIME_ZONE"/>
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+
+    <application android:label="ABKKO"
+        tools:replace="android:label"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/Theme.AppCompat.Light">
+        <activity
+            android:name="com.android.kk.bike.BikeMainActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.android.kk.bike.OverlayShowingButtonOrux"
+            android:exported="false" />
+
+        <service
+            android:name="com.android.kk.bike.OverlayShowingButtonKi"
+            android:exported="false" />
+
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name="com.android.kk.bike.ActivityRunOnStartupBike"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

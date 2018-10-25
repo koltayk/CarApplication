@@ -1,0 +1,110 @@
+<?xml version="1.1" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="preferExternal"
+    package="com.android.kk.carleft">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!--<uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"/>-->
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+
+    <application android:label="AALKK"
+        tools:replace="android:label"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/Theme.AppCompat.Light">
+        <activity
+            android:name="com.android.kk.carleft.CarLeftActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.android.kk.carleft.OverlayShowingButtonNavi"
+            android:exported="false" />
+
+        <service
+            android:name="com.android.kk.carleft.OverlayShowingButtonOrux"
+            android:exported="false" />
+
+        <service
+            android:name="com.android.kk.carleft.OverlayShowingButtonKi"
+            android:exported="false" />
+
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name="com.android.kk.carleft.ActivityRunOnStartupCarLeft"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.android.kk.carleft.PowerConnectionReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.android.kk.carleft.AdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>`
+
+        <activity
+            android:label="kilép"
+            android:icon="@drawable/system_shutdown"
+            android:taskAffinity="com.android.kk.carleft.PowerOffActivity"
+            android:name="com.android.kk.carapplication.PowerOffActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="újrainít"
+            android:icon="@drawable/system_reboot"
+            android:taskAffinity="com.android.kk.carleft.RebootActivity"
+            android:name="com.android.kk.carapplication.RebootActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication" />
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/bike" />
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carleft" />
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carmain" />
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/common" />
+            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

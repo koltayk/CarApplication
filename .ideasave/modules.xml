@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CarApplication.iml" filepath="$PROJECT_DIR$/CarApplication.iml" />
+      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/common/common.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/common/common.iml" />
+      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000/sqlite-android-3230000.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000/sqlite-android-3230000.iml" />
+    </modules>
+  </component>
+</project>
