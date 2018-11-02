@@ -1,24 +1,13 @@
 package com.android.kk.carmain;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.view.View;
 
-import com.android.kk.carapplication.GetGPSTimeThread;
 import com.android.kk.carapplication.MainActivity;
+import com.android.kk.carapplication.OverlayShowingButtonServiceNaviAbstract;
 import com.android.kk.carapplication.R;
 
 import java.io.Serializable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class CarMainActivity extends MainActivity implements Serializable {
 
@@ -34,13 +23,13 @@ public class CarMainActivity extends MainActivity implements Serializable {
 //        if (isSystemAlertPermissionGranted(CarMainActivity.this)) {
 
 //        setFullScreen();
-        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonZene.class);
+        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonServiceZene.class);
         startService(serviceZene);
         serviceZene.putExtra("main", this);
-        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonNavi.class);
+        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonServiceNavi.class);
         startService(serviceNavi);
         serviceNavi.putExtra("main", this);
-        startService(new Intent(getApplicationContext(), OverlayShowingButtonKi.class));
+        startService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
 
 //        Intent serviceBT = new Intent(getApplicationContext(), ThinBTHFPClient.class);
 //        startService(serviceBT);

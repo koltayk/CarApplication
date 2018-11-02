@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.kk.carapplication.OverlayShowingButton;
+import com.android.kk.carapplication.OverlayShowingButtonService;
 
 import java.io.IOException;
 
@@ -12,23 +13,23 @@ import java.io.IOException;
  * Created by kk on 2016.12.31.
  */
 
-public class OverlayShowingButtonKi extends OverlayShowingButton {
+public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
 
     boolean open = false;
     boolean longClick = false;
 
-    public OverlayShowingButtonKi() {
+    public OverlayShowingButtonServiceKi() {
         super("ki", 0, 800, 16, 111, "");
 //        color = 0x33ddccff;
 //        textColor = 0xddcc11;
     }
 
     @Override
-    public boolean openApp() {
+    public boolean openApp(OverlayShowingButton overlayShowingButton) {
         if (open && !longClick) {
-            stopService(new Intent(getApplicationContext(), OverlayShowingButtonNavi.class));
-            stopService(new Intent(getApplicationContext(), OverlayShowingButtonOrux.class));
-            stopService(new Intent(getApplicationContext(), OverlayShowingButtonKi.class));
+            stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceNavi.class));
+            stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceOrux.class));
+            stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
             stopService(new Intent(getApplicationContext(), CarLeftActivity.class));
             android.os.Process.killProcess(android.os.Process.myPid()); // kicsit brutál, de nem találtam jobbat
         }
@@ -38,7 +39,7 @@ public class OverlayShowingButtonKi extends OverlayShowingButton {
     }
 
     @Override
-    public void openAppOnTouch() {}
+    public void openAppOnTouch(OverlayShowingButton overlayShowingButton) {}
 
     @Override
     public boolean onLongClick(View v) {

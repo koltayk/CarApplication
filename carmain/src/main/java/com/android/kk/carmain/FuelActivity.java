@@ -91,7 +91,7 @@ public class FuelActivity extends Activity implements Serializable {
         setContentView(com.android.kk.carapplication.R.layout.activity_fuel);
 
         loadSqlite();
-        MainActivity.activity.getTimeAndPos();
+//        MainActivity.activity.getTimeAndPos();
         latitude = MainActivity.activity.getLatitude();
         longitude = MainActivity.activity.getLongitude();
         this.txtPart = (TextView) findViewById(com.android.kk.carapplication.R.id.txtPart);

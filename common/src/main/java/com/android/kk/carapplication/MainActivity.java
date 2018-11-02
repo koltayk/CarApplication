@@ -9,9 +9,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.View;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,7 @@ public class MainActivity extends Activity implements Serializable {
 
     public static MainActivity activity;
 
-    private OverlayShowingButton button;
+    private List<OverlayShowingButton> buttons = new ArrayList<>();
 
     private double latitude;
 
@@ -42,12 +43,8 @@ public class MainActivity extends Activity implements Serializable {
         this.longitude = longitude;
     }
 
-    public OverlayShowingButton getButton() {
-        return button;
-    }
-
-    public void setButton(OverlayShowingButton button) {
-        this.button = button;
+    public List<OverlayShowingButton> getButtons() {
+        return buttons;
     }
 
     /**
@@ -65,6 +62,7 @@ public class MainActivity extends Activity implements Serializable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = this;
     }
 
     @Override

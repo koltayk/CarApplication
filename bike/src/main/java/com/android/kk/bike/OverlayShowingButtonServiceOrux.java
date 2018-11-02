@@ -1,20 +1,16 @@
 package com.android.kk.bike;
 
 import android.content.ContentResolver;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.kk.carapplication.OverlayShowingButton;
+import com.android.kk.carapplication.OverlayShowingButtonService;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
-public class OverlayShowingButtonOrux extends OverlayShowingButton {
-    public OverlayShowingButtonOrux() {
+public class OverlayShowingButtonServiceOrux extends OverlayShowingButtonService {
+    public OverlayShowingButtonServiceOrux() {
         super("orux", 660, 1010, 16, 97,"com.orux.oruxmaps");
     }
 
@@ -37,8 +33,8 @@ public class OverlayShowingButtonOrux extends OverlayShowingButton {
 
     }
 
-    public boolean openApp() {
+    public boolean openApp(OverlayShowingButton overlayShowingButton) {
         setBrightness();
-        return super.openApp();
+        return super.openApp(overlayShowingButton);
     }
 }

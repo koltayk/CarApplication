@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.android.kk.carapplication.MainActivity;
 import com.android.kk.carapplication.OverlayShowingButton;
+import com.android.kk.carapplication.OverlayShowingButtonService;
 
 import java.io.Serializable;
 
@@ -19,7 +20,6 @@ public class CarLeftActivity extends MainActivity implements Serializable {
 
     public static CarLeftActivity activity;
 
-    public OverlayShowingButton button;
     public double latitude;
     public double longitude;
 
@@ -30,13 +30,13 @@ public class CarLeftActivity extends MainActivity implements Serializable {
         setContentView(R.layout.activity_carleft);
         requestSystemAlertPermission(CarLeftActivity.this,1);
 
-        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonOrux.class);
+        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonServiceOrux.class);
         startService(serviceZene);
         serviceZene.putExtra("main", this);
-        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonNavi.class);
+        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonServiceNavi.class);
         startService(serviceNavi);
         serviceNavi.putExtra("main", this);
-//        startService(new Intent(getApplicationContext(), OverlayShowingButtonKi.class));
+//        startService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
 
 //        getTimeAndPos();
     }
@@ -76,28 +76,5 @@ public class CarLeftActivity extends MainActivity implements Serializable {
     public static boolean isSystemAlertPermissionGranted(Context context) {
         final boolean result = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Settings.canDrawOverlays(context);
         return result;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        if (igo != null) {
-//            igo.onDestroy();
-//        }
-//        if (gonemad != null) {
-//            gonemad.onDestroy();
-//        }
-//        finishAffinity();
-//        android.os.Process.killProcess(android.os.Process.myPid());
-    }
-
-    @Override
-    public OverlayShowingButton getButton() {
-        return this.button;
-    }
-
-    @Override
-    public void setButton(OverlayShowingButton button) {
-        this.button = button;
     }
 }

@@ -1,42 +1,69 @@
-package com.android.kk.carmain;
+package com.android.kk.carapplication;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 
-import com.android.kk.carapplication.OverlayShowingButton;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by kk on 2016.12.31.
  */
 
-public class OverlayShowingButtonNavi extends OverlayShowingButton {
+public class OverlayShowingButtonServiceNaviAbstract extends LongClick {
 
-    public static final String PACKAGE_NAME_PRIMO = "com.nng.igoprimoisr.javaclient,primo";
-    public static final String PACKAGE_NAME_AVIC = "jp.pioneer.mbg.avicsync,avic";
-    public static final String PACKAGE_NAME_NG_ISR = "com.nng.igoprimoisrael.javaclient,isr";
-    public static final String PACKAGE_NAME_NG_BASAR = "com.basarsoft.igonextgen.javaclient,basar";
-    public static final String PACKAGE_NAME_SYGIC = "com.sygic.aura,sygic";
+    protected List<OverlayShowingButton> buttons = new ArrayList<>();
 
-    public OverlayShowingButtonNavi() {
-        super("navi", 610, 500, new String[]{
-                PACKAGE_NAME_AVIC,
-//                PACKAGE_NAME_NG_ISR,
-                PACKAGE_NAME_PRIMO,
-//                PACKAGE_NAME_NG_BASAR,
-                PACKAGE_NAME_SYGIC,
-        });
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    public boolean openApp() {
-        super.openApp();
+    public void onCreate() {
+        createButtons();
+        for (OverlayShowingButton overlayedButton: buttons) {
+            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onCreate before " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
+            overlayedButton.onCreate(this, (WindowManager) getSystemService(Context.WINDOW_SERVICE));
+            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onCreate after " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
+
+        }
+    }
+
+    protected void createButtons() {
+    }
+
+    public boolean openApp(OverlayShowingButton overlayShowingButton) {
+        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) before " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+    if (overlayShowingButton.getButton().getVisibility() == View.GONE) {
+            return false;
+    }
+        for (OverlayShowingButton button: buttons) {
+            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) for " + button.name + " getVisibility(): " + button.button.getVisibility());
+
+            if (button != overlayShowingButton) {
+                button.setVisible(View.GONE);
+            }
+        }
+        OverlayShowingButton.openApp(this, overlayShowingButton);
+        overlayShowingButton.setVisible(View.VISIBLE);
+        final MainActivity activity = MainActivity.activity;
+        for (OverlayShowingButton currButton: activity.getButtons()) {
+            currButton.setVisible(View.VISIBLE);
+        }
+        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) after " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+
         LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -67,6 +94,40 @@ public class OverlayShowingButtonNavi extends OverlayShowingButton {
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public void openAppOnTouch(OverlayShowingButton overlayShowingButton) {
+        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openAppOnTouch(button) " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+//        for (OverlayShowingButton button: buttons) {
+//            if (button == overlayShowingButton) {
+//                OverlayShowingButton.openApp(this, overlayShowingButton);
+//                button.setVisible(View.VISIBLE);
+//            }
+//            else {
+//                button.setVisible(View.GONE);
+//            }
+//        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onLongClick(): " + v);
+        for (OverlayShowingButton button: buttons) {
+            button.setVisible(View.VISIBLE);
+        }
+        return false;
+    }
+
+    public void setButton(OverlayShowingButton overlayShowingButton) {
+        for (OverlayShowingButton button: buttons) {
+            if (button == overlayShowingButton) {
+                button.setVisible(View.VISIBLE);
+            }
+            else {
+                button.setVisible(View.GONE);
+            }
+        }
     }
 //
 //    public void setTime(long time) throws IOException { // nem müködik

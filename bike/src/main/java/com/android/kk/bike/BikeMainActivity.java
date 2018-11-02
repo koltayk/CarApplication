@@ -32,13 +32,13 @@ public class BikeMainActivity extends MainActivity implements Serializable {
             }
 }
 
-        Intent serviceOrux = new Intent(getApplicationContext(), OverlayShowingButtonOrux.class);
+        Intent serviceOrux = new Intent(getApplicationContext(), OverlayShowingButtonServiceOrux.class);
         startService(serviceOrux);
         serviceOrux.putExtra("main", this);
 //        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonNavi.class);
 //        startService(serviceNavi);
 //        serviceNavi.putExtra("main", this);
-        startService(new Intent(getApplicationContext(), OverlayShowingButtonKi.class));
+        startService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
 
         getTimeAndPos();
     }

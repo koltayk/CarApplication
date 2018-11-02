@@ -20,7 +20,7 @@
 
     <uses-permission android:name="android.permission.SET_TIME_ZONE"/>
 
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <application android:label="ABKKO"
         tools:replace="android:label"
@@ -38,11 +38,11 @@
         </activity>
 
         <service
-            android:name="com.android.kk.bike.OverlayShowingButtonOrux"
+            android:name="com.android.kk.bike.OverlayShowingButtonServiceOrux"
             android:exported="false" />
 
         <service
-            android:name="com.android.kk.bike.OverlayShowingButtonKi"
+            android:name="com.android.kk.bike.OverlayShowingButtonServiceKi"
             android:exported="false" />
 
         <receiver

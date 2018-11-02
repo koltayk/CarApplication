@@ -37,15 +37,15 @@
         </activity>
 
         <service
-            android:name="com.android.kk.carleft.OverlayShowingButtonNavi"
+            android:name="com.android.kk.carleft.OverlayShowingButtonServiceNavi"
             android:exported="false" />
 
         <service
-            android:name="com.android.kk.carleft.OverlayShowingButtonOrux"
+            android:name="com.android.kk.carleft.OverlayShowingButtonServiceOrux"
             android:exported="false" />
 
         <service
-            android:name="com.android.kk.carleft.OverlayShowingButtonKi"
+            android:name="com.android.kk.carleft.OverlayShowingButtonServiceKi"
             android:exported="false" />
 
         <receiver

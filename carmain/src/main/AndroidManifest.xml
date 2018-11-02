@@ -34,15 +34,15 @@
         </activity>
 
         <service
-            android:name="com.android.kk.carmain.OverlayShowingButtonNavi"
-            android:exported="false" />
-
-        <servicefreerdp
-            android:name="com.android.kk.carmain.OverlayShowingButtonZene"
+            android:name="com.android.kk.carmain.OverlayShowingButtonServiceNavi"
             android:exported="false" />
 
         <service
-            android:name="com.android.kk.carmain.OverlayShowingButtonKi"
+            android:name="com.android.kk.carmain.OverlayShowingButtonServiceZene"
+            android:exported="false" />
+
+        <service
+            android:name="com.android.kk.carmain.OverlayShowingButtonServiceKi"
             android:exported="false" />
 
 <!--
