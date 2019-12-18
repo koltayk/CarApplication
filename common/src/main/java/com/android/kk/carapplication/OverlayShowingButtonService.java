@@ -2,6 +2,7 @@ package com.android.kk.carapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ public class OverlayShowingButtonService extends LongClick {
     private int textSize = 32;
     private int buttonWidth = 0;
     protected String appPackageName;
+    protected MainActivity activity;
 
     public OverlayShowingButtonService(String name, int xPos, int yPos, String appPackageName) {
         this.name = name;
@@ -51,12 +53,20 @@ public class OverlayShowingButtonService extends LongClick {
         createButton();
         this.wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         this.overlayedButton.onCreate(this, this.wm);
-        MainActivity.activity.getButtons().add(this.overlayedButton);
     }
 
     protected void createButton() {
         this.overlayedButton = new OverlayShowingButton(this, name, xPos, yPos, appPackageName);
         setButtonSize(textSize, buttonWidth);
+    }
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+//        Bundle extras = intent.getExtras();
+//        activity = (MainActivity) extras.get("main");
+        activity = MainActivity.activity;
+        activity.getButtons().add(this.overlayedButton);
+        Log.d(MainActivity.TAG, "OverlayShowingButtonService.activity: " + activity + " service: " + intent.hashCode());
+        return flags;
     }
 
     public void onDestroy() {
@@ -68,22 +78,22 @@ public class OverlayShowingButtonService extends LongClick {
             overlayedButton.topLeftView = null;
         }
     }
-
-    @Override
-    public void setButton(OverlayShowingButton overlayShowingButton) {
-        this.overlayedButton = overlayShowingButton;
-    }
+//
+//    @Override
+//    public void setButton(OverlayShowingButton overlayShowingButton) {
+//        this.overlayedButton = overlayShowingButton;
+//    }
 
     public void openAppOnTouch(OverlayShowingButton overlayShowingButton) {
-        Log.d("kkLog", "OverlayShowingButtonService.openAppOnTouch(button) " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
-        OverlayShowingButton.openApp(this, overlayShowingButton);
+        overlayShowingButton.openApp(this);
+        Log.d(MainActivity.TAG, "OverlayShowingButtonService.openAppOnTouch(button) end");
     }
 
     @Override
     public boolean onLongClick(View v) {
-        Log.d("kkLog", "OverlayShowingButtonService.onLongClick(): " + v);
+        Log.d(MainActivity.TAG, "OverlayShowingButtonService.onLongClick(): " + v);
         Toast.makeText(this, "package " + this.overlayedButton.getAppPackageName() + " hosszan nyomva", Toast.LENGTH_SHORT).show();
-        OverlayShowingButton.openApp(this, this.overlayedButton);
+        this.overlayedButton.openApp(this);
 
         return false;
     }
@@ -93,7 +103,7 @@ public class OverlayShowingButtonService extends LongClick {
      * @param overlayShowingButton
      */
     public boolean openApp(OverlayShowingButton overlayShowingButton) {
-        if (OverlayShowingButton.openApp(this, this.overlayedButton)) return false;
+        if (overlayShowingButton.openApp(this)) return false;
 
         setButton();
         return true;

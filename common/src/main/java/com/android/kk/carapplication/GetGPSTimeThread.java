@@ -60,7 +60,7 @@ public class GetGPSTimeThread implements Runnable {
             if (lastKnownLocation != null) {
                 long networkTS = lastKnownLocation.getTime();
                 Runtime.getRuntime().exec("busybox date -s @" + networkTS / 1000);
-                Log.d("kkLog", "LastKnownLocationTime: " + new Date(networkTS));
+                Log.d(MainActivity.TAG, "LastKnownLocationTime: " + new Date(networkTS));
                 this.activity.setLatitude(lastKnownLocation.getLatitude());
                 this.activity.setLongitude(lastKnownLocation.getLongitude());
                 stp.shutdown();

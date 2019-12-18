@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="preferExternal"
-    package="com.android.kk.carapplication">
+    package="com.android.kk.carmain">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -34,11 +34,11 @@
         </activity>
 
         <service
-            android:name="com.android.kk.carmain.OverlayShowingButtonServiceNavi"
+            android:name="com.android.kk.carmain.OverlayShowingButtonServiceZene"
             android:exported="false" />
 
         <service
-            android:name="com.android.kk.carmain.OverlayShowingButtonServiceZene"
+            android:name="com.android.kk.carmain.OverlayShowingButtonServiceNavi"
             android:exported="false" />
 
         <service

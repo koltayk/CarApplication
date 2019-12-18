@@ -1,37 +1,51 @@
 package com.android.kk.carmain;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 
+import com.android.kk.carapplication.LongClick;
 import com.android.kk.carapplication.MainActivity;
-import com.android.kk.carapplication.OverlayShowingButtonServiceNaviAbstract;
-import com.android.kk.carapplication.R;
 
-import java.io.Serializable;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Scanner;
 
-public class CarMainActivity extends MainActivity implements Serializable {
+public class CarMainActivity extends MainActivity {
+    private static final String MOUNT_SD = "/data/misc/user/bin/mountExtSD.sh";
 
 //    private ThinBTHFPClient thinBTClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(MainActivity.TAG, "CarMainActivity onCreate begin");
         super.onCreate(savedInstanceState);
-        activity = this;
         setContentView(R.layout.activity_car_main);
-        requestSystemAlertPermission(CarMainActivity.this,1);
+        requestSystemAlertPermission(CarMainActivity.this,REQUEST_CODE);
 
-//        if (isSystemAlertPermissionGranted(CarMainActivity.this)) {
+        try {
 
-//        setFullScreen();
-        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonServiceZene.class);
-        startService(serviceZene);
-        serviceZene.putExtra("main", this);
-        Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonServiceNavi.class);
-        startService(serviceNavi);
-        serviceNavi.putExtra("main", this);
-        startService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
+//            Process process = Runtime.getRuntime().exec("su");
+//            process.getOutputStream().write(MOUNT_SD.getBytes());
+//            Scanner s = new Scanner(process.getInputStream());
+//            while(s.hasNextLine()){
+//                Log.d(MainActivity.TAG, s.nextLine()); // will give the process output
+//            }
+            Process process = Runtime.getRuntime().exec(new String[]{"su", "-c", MOUNT_SD});
+            String errStream = readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
+            String inpStream = readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
+            Log.d(MainActivity.TAG, inpStream);
+            Log.d(MainActivity.TAG, errStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        startService(OverlayShowingButtonServiceZene.class);
+        startService(OverlayShowingButtonServiceNavi.class);
+        startService(OverlayShowingButtonServiceKi.class);
 
-//        Intent serviceBT = new Intent(getApplicationContext(), ThinBTHFPClient.class);
+        //        Intent serviceBT = new Intent(getApplicationContext(), ThinBTHFPClient.class);
 //        startService(serviceBT);
 
 //            overlayShowingService();
@@ -46,6 +60,19 @@ public class CarMainActivity extends MainActivity implements Serializable {
 //        }
 //
 //        thinBTClient.ring();
+        Log.d(MainActivity.TAG, "CarMainActivity onCreate end");
+    }
+
+    private void startService(Class<?> serviceClass) {
+
+        /** check if we already  have permission to draw over other apps */
+        if (Settings.canDrawOverlays(this)) {
+            Intent service = new Intent(getApplicationContext(), serviceClass);
+            service.putExtra("main", this);
+            Log.d(MainActivity.TAG, "CarMainActivity.this: " + this + " service: " + service.hashCode());
+            startService(service);
+        }
+
     }
 
     @Override
@@ -56,6 +83,19 @@ public class CarMainActivity extends MainActivity implements Serializable {
 //                setFullScreen();
 //            }
 //        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        Log.d(MainActivity.TAG, "CarMainActivity onActivityResult begin");
+        /** check if received result code
+         is equal our requested code for draw permission  */
+        if (requestCode == REQUEST_CODE) {
+            startService(OverlayShowingButtonServiceZene.class);
+            startService(OverlayShowingButtonServiceNavi.class);
+            startService(OverlayShowingButtonServiceKi.class);
+        }
+        Log.d(MainActivity.TAG, "CarMainActivity onActivityResult end");
     }
 //
 //    private void setFullScreen() {

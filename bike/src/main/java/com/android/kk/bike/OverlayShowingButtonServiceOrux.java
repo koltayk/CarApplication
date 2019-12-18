@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.kk.carapplication.MainActivity;
 import com.android.kk.carapplication.OverlayShowingButton;
 import com.android.kk.carapplication.OverlayShowingButtonService;
 
@@ -20,8 +21,8 @@ public class OverlayShowingButtonServiceOrux extends OverlayShowingButtonService
         Calendar calendar = Calendar.getInstance();
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
         long timeInMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
-        Log.d("kkLog", "dayOfYear: " + dayOfYear);
-        Log.d("kkLog", "time: " + timeInMinutes);
+        Log.d(MainActivity.TAG, "dayOfYear: " + dayOfYear);
+        Log.d(MainActivity.TAG, "time: " + timeInMinutes);
         //constrain the value of brightness
         if(brightness < 0)
             brightness = 0;

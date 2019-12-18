@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -18,8 +20,10 @@ import android.widget.Toast;
 
 public class OverlayShowingButton implements OnTouchListener, OnClickListener, OnLongClickListener {
 
+    public static final int LONGCLICKTIME = 1000;
+
     protected int bgrColor = 0x553344dd;
-    protected int textColor = 0xffffff;
+    protected int textColor = 0x77ffff00;
     protected Button button;
     protected View topLeftView;
 
@@ -28,7 +32,8 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
     private int originalXPos;
     private int originalYPos;
     private boolean moving;
-//    private int visible = View.VISIBLE;
+    private long then = 0;
+    private int visible = View.VISIBLE;
 
     protected WindowManager wm;
     protected String appPackageName;
@@ -39,6 +44,9 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
     private int buttonWidth = 0;
 
     private LongClick buttonContainer = null;
+    private boolean initialized = false;
+
+    private boolean killable = false;   // nincs használatban
 
     public OverlayShowingButton(LongClick context) {
         this.buttonContainer = context;
@@ -65,13 +73,24 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
 
     public OverlayShowingButton(LongClick context, String name, int xPos, int yPos, String appPackageName, int visible) {
         this(context, name, xPos, yPos, appPackageName);
+        this.visible = visible;
         this.setVisible(visible);
-        Log.d("kkLog", "OverlayShowingButton() " + name + " getVisibility(): " + this.button.getVisibility());
+        Log.d(MainActivity.TAG, "OverlayShowingButton() " + name + " getVisibility(): " + this.button.getVisibility());
+    }
+
+    public OverlayShowingButton(LongClick context, String name, int xPos, int yPos, int textSize, int buttonWidth, String appPackageName, int visible) {
+        this(context, name, xPos, yPos, appPackageName, visible);
+        setButtonSize(textSize, buttonWidth);
+    }
+
+    public OverlayShowingButton(LongClick context, String name, int xPos, int yPos, String appPackageName, int visible, boolean killable) {
+        this(context, name, xPos, yPos, appPackageName, visible);
+        this.killable = killable;
     }
 
     public void setVisible(int visible) {
         this.button.setVisibility(visible);
-        Log.d("kkLog", "OverlayShowingButton.setVisible() " + name + ": " + this.button.getVisibility());
+        Log.d(MainActivity.TAG, "OverlayShowingButton.setVisible() " + name + ": " + this.button.getVisibility());
     }
 
     public void setTextSize(int textSize) {
@@ -90,24 +109,31 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
         return button;
     }
 
+    public boolean isKillable() {
+        return killable;
+    }
+
     public void onCreate(Context context, WindowManager wm) {
+        Log.d(MainActivity.TAG, "OverlayShowingButton onCreate begin");
         this.wm = wm;
-//        button = new Button(context);
+        button = new Button(context);
         button.setText(name);
         button.setTextSize(textSize);
-//        button.setTextColor(textColor);
+        button.setTextColor(textColor);
         button.setBackgroundColor(bgrColor);
         button.setOnTouchListener(this);
         button.setOnClickListener(this);
         button.setOnLongClickListener(this);
-//        this.button.setVisibility(visible);
+        this.button.setVisibility(visible);
 
-        LayoutParams params = new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.TYPE_SYSTEM_ALERT,
-                LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT);
+        LayoutParams params = getLayoutParams();
+
+//        LayoutParams params = new LayoutParams(
+//                LayoutParams.WRAP_CONTENT,
+//                LayoutParams.WRAP_CONTENT,
+//                LayoutParams.TYPE_SYSTEM_ALERT,
+//                LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.LEFT | Gravity.TOP;
         params.x = originalXPos;
         params.y = originalYPos;
@@ -117,12 +143,13 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
         wm.addView(button, params);
 
         topLeftView = new View(context);
-        LayoutParams topLeftParams = new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.TYPE_SYSTEM_ALERT,
-                LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT);
+        LayoutParams topLeftParams = getLayoutParams();
+//        LayoutParams topLeftParams = new LayoutParams(
+//                LayoutParams.WRAP_CONTENT,
+//                LayoutParams.WRAP_CONTENT,
+//                LayoutParams.TYPE_SYSTEM_ALERT,
+//                LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                PixelFormat.TRANSLUCENT);
         topLeftParams.gravity = Gravity.LEFT | Gravity.TOP;
         topLeftParams.x = 0;
         topLeftParams.y = 0;
@@ -131,13 +158,39 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
         wm.addView(topLeftView, topLeftParams);
 
         openApp();
+        initialized = true;
+        Log.d(MainActivity.TAG, "OverlayShowingButton onCreate end");
+    }
+
+    @NonNull
+    private LayoutParams getLayoutParams() {
+        int type;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            type = LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }
+         else {
+            type = LayoutParams.TYPE_SYSTEM_ALERT;
+        }
+        return new LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+                type,
+                LayoutParams.FLAG_NOT_FOCUSABLE
+                        | LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                        | LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Log.d(MainActivity.TAG, "OverlayShowingButton onTouch begin");
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+                then = (Long) System.currentTimeMillis();
                 float x = event.getRawX();
                 float y = event.getRawY();
 
@@ -182,12 +235,16 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                if (moving) {
-                    openAppOnTouch(this);
+                long diff = (Long) System.currentTimeMillis() - then;
+                if(diff > LONGCLICKTIME){
+                    return buttonContainer.onLongClick(v);
+                }
+                else {
+                    openApp();
                     return true;
                 }
 
-                break;
+//                break;
             }
             default:
                 break;
@@ -240,6 +297,7 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
 //                return true;
 //            }
 //        }
+        Log.d(MainActivity.TAG, "OverlayShowingButton onTouch end");
         return false;
     }
 
@@ -254,7 +312,8 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
 
     @Override
     public boolean onLongClick(View v) {
-        return buttonContainer.onLongClick(v);
+        return false;
+//        return buttonContainer.onLongClick(v);
     }
 
     /** Open the app.
@@ -264,7 +323,7 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
         return buttonContainer.openApp(this);
     }
 
-    protected String getAppPackageName() {
+    public String getAppPackageName() {
         String[] appPackageNameParts = appPackageName.split(",");
         if (appPackageNameParts.length > 1) {
             button.setText(appPackageNameParts[1]);
@@ -272,26 +331,28 @@ public class OverlayShowingButton implements OnTouchListener, OnClickListener, O
         return appPackageNameParts[0];
     }
 
-    public static boolean openApp(Context context, OverlayShowingButton overlayedButton) {
-        Log.d("kkLog", "OverlayShowingButton.openApp(context, overlayedButton) " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
+    public boolean openApp(Context context) {
+        Log.d(MainActivity.TAG, "OverlayShowingButton.openApp(context, this) " + this.name + " getVisibility(): " + this.button.getVisibility());
 
-        if (overlayedButton.button.getVisibility() == View.GONE) {
+        if (this.button.getVisibility() == View.GONE) {
             return true;
         }
-        Toast.makeText(context, "package " + overlayedButton.getAppPackageName() + " indítása", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "package " + this.getAppPackageName() + " indítása", Toast.LENGTH_SHORT).show();
         PackageManager manager = context.getPackageManager();
         Intent intent = null;
         try {
-            intent = manager.getLaunchIntentForPackage(overlayedButton.getAppPackageName());
+            intent = manager.getLaunchIntentForPackage(this.getAppPackageName());
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             context.startActivity(intent);
         } catch (Exception e) {
         }
         if (intent == null) {
-            Toast.makeText(context, "package " + overlayedButton.getAppPackageName() + " nem található", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "package " + this.getAppPackageName() + " nem található", Toast.LENGTH_SHORT).show();
             return true;
         }
-        overlayedButton.setVisible(View.GONE);
+        if (initialized)
+        this.setVisible(View.GONE);
+        Log.d(MainActivity.TAG, "OverlayShowingButton.openApp(context, this) end");
         return false;
     }
 //

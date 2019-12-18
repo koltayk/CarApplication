@@ -35,5 +35,5 @@ public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
     }
 
     @Override
-    public void openAppOnTouch() {}
+    public void openAppOnTouch(OverlayShowingButton overlayShowingButton) {}
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,11 +21,12 @@ import java.util.List;
  * Created by kk on 2016.12.31.
  */
 
-public class OverlayShowingButtonServiceNaviAbstract extends LongClick {
+public class OverlayShowingButtonServiceMulti extends LongClick {
 
     protected List<OverlayShowingButton> buttons = new ArrayList<>();
+    protected OverlayShowingButton activeButton;
+    protected MainActivity activity;
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -32,73 +34,60 @@ public class OverlayShowingButtonServiceNaviAbstract extends LongClick {
 
     @Override
     public void onCreate() {
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.onCreate() begin");
         createButtons();
         for (OverlayShowingButton overlayedButton: buttons) {
-            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onCreate before " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
+            Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.onCreate before " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
             overlayedButton.onCreate(this, (WindowManager) getSystemService(Context.WINDOW_SERVICE));
-            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onCreate after " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
-
+            Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.onCreate after " + overlayedButton.name + " getVisibility(): " + overlayedButton.button.getVisibility());
         }
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.onCreate() end");
     }
 
     protected void createButtons() {
     }
 
-    public boolean openApp(OverlayShowingButton overlayShowingButton) {
-        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) before " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
-    if (overlayShowingButton.getButton().getVisibility() == View.GONE) {
-            return false;
+    public int onStartCommand(Intent intent, int flags, int startId) {
+//        Bundle extras = intent.getExtras();
+//        activity = (MainActivity) extras.get("main");
+        activity = MainActivity.activity;
+        activity.getMultiButtons().add(this);
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.activity: " + activity + " service: " + intent.hashCode());
+        return START_NOT_STICKY;
     }
+
+    public boolean openApp(OverlayShowingButton overlayShowingButton) {
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.openApp(button) before " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+        if (overlayShowingButton.getButton().getVisibility() == View.GONE) {
+            return false;
+        }
+        activeButton = overlayShowingButton;
         for (OverlayShowingButton button: buttons) {
-            Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) for " + button.name + " getVisibility(): " + button.button.getVisibility());
+            Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.openApp(button) for " + button.name + " getVisibility(): " + button.button.getVisibility());
 
             if (button != overlayShowingButton) {
                 button.setVisible(View.GONE);
             }
         }
-        OverlayShowingButton.openApp(this, overlayShowingButton);
+        overlayShowingButton.openApp(this);
         overlayShowingButton.setVisible(View.VISIBLE);
-        final MainActivity activity = MainActivity.activity;
-        for (OverlayShowingButton currButton: activity.getButtons()) {
-            currButton.setVisible(View.VISIBLE);
-        }
-        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openApp(button) after " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
-
-        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return false;
-        }
-//        List<String> list = locationManager.getProviders(true);
-//        Log.d("getProviders",""+list);
-        try {
-
-//            initialiseLocationListener(getApplicationContext());
-
-            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-
-            if (lastKnownLocation != null) {
-                long networkTS = lastKnownLocation.getTime();
-                Runtime.getRuntime().exec("busybox date -s @" + networkTS/1000);
-                Log.d("kkLog", "LastKnownLocationTime: " + networkTS);
-//                setTime(networkTS);
+        if (activity != null) {
+            Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.activity: " + activity + " service: " + this);
+            for (OverlayShowingButton currButton: activity.getButtons()) {
+                currButton.setVisible(View.VISIBLE);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            for (OverlayShowingButtonServiceMulti currMultiButton: activity.getMultiButtons()) {
+                currMultiButton.setButton();
+            }
         }
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.openApp(button) after " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+
         return true;
     }
 
     @Override
     public void openAppOnTouch(OverlayShowingButton overlayShowingButton) {
-        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.openAppOnTouch(button) " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.openAppOnTouch(button) " + overlayShowingButton.name + " getVisibility(): " + overlayShowingButton.button.getVisibility());
 //        for (OverlayShowingButton button: buttons) {
 //            if (button == overlayShowingButton) {
 //                OverlayShowingButton.openApp(this, overlayShowingButton);
@@ -112,16 +101,16 @@ public class OverlayShowingButtonServiceNaviAbstract extends LongClick {
 
     @Override
     public boolean onLongClick(View v) {
-        Log.d("kkLog", "OverlayShowingButtonServiceNaviAbstract.onLongClick(): " + v);
+        Log.d(MainActivity.TAG, "OverlayShowingButtonServiceMulti.onLongClick(): " + v);
         for (OverlayShowingButton button: buttons) {
             button.setVisible(View.VISIBLE);
         }
-        return false;
+        return true;
     }
 
-    public void setButton(OverlayShowingButton overlayShowingButton) {
+    public void setButton() {
         for (OverlayShowingButton button: buttons) {
-            if (button == overlayShowingButton) {
+            if (button == activeButton) {
                 button.setVisible(View.VISIBLE);
             }
             else {

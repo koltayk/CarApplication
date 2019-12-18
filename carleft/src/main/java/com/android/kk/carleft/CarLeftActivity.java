@@ -30,12 +30,12 @@ public class CarLeftActivity extends MainActivity implements Serializable {
         setContentView(R.layout.activity_carleft);
         requestSystemAlertPermission(CarLeftActivity.this,1);
 
-        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonServiceOrux.class);
-        startService(serviceZene);
-        serviceZene.putExtra("main", this);
         Intent serviceNavi = new Intent(getApplicationContext(), OverlayShowingButtonServiceNavi.class);
         startService(serviceNavi);
         serviceNavi.putExtra("main", this);
+        Intent serviceZene = new Intent(getApplicationContext(), OverlayShowingButtonServiceOrux.class);
+        startService(serviceZene);
+        serviceZene.putExtra("main", this);
 //        startService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
 
 //        getTimeAndPos();

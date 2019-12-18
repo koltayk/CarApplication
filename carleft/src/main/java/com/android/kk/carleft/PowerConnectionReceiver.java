@@ -9,6 +9,8 @@ import android.os.BatteryManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.kk.carapplication.MainActivity;
+
 import java.io.IOException;
 
 public class PowerConnectionReceiver extends BroadcastReceiver {
@@ -31,7 +33,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
 
         String msg = "status: " + status + " chargePlug: " + chargePlug + " isCharging: " + isCharging + " usbCharge: " + usbCharge + " acCharge: " + acCharge;
-        Log.d("kkLog", "Battery: " + msg);
+        Log.d(MainActivity.TAG, "Battery: " + msg);
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
         if (isCharging) {
@@ -54,6 +56,6 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
     public static void setHaltNum(String num) throws IOException {
         haltNumProc = Runtime.getRuntime().exec(new String[]{"su", "-c", halt + "num.sh", num});
-        Log.d("kkLog", "Halt proc after: " + num);
+        Log.d(MainActivity.TAG, "Halt proc after: " + num);
     }
 }

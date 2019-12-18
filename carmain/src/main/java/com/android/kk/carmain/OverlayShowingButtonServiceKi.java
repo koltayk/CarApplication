@@ -1,15 +1,17 @@
 package com.android.kk.carmain;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.android.kk.carapplication.MainActivity;
 import com.android.kk.carapplication.OverlayShowingButton;
-import com.android.kk.carapplication.OverlayShowingButtonServiceNaviAbstract;
+import com.android.kk.carapplication.OverlayShowingButtonServiceMulti;
 import com.android.kk.carapplication.OverlayShowingButtonService;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Created by kk on 2016.12.31.
@@ -18,11 +20,11 @@ import java.io.IOException;
 public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
     public static final String IGOSAVERESET = "/data/misc/user/bin/igosavereset.sh";
 
-    boolean open = false;
-    boolean longClick = false;
+    private boolean open = false;
+    private boolean longClick = false;
 
     public OverlayShowingButtonServiceKi() {
-        super("ki", 750, 275, "");
+        super("ki", 610, -30, "");
 //        color = 0x33ddccff;
 //        textColor = 0xddcc11;
     }
@@ -30,11 +32,12 @@ public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
     @Override
     public boolean openApp(OverlayShowingButton overlayShowingButton) {
         if (open && !longClick) {
-            stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceNaviAbstract.class));
+            stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceMulti.class));
             stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceZene.class));
             stopService(new Intent(getApplicationContext(), OverlayShowingButtonServiceKi.class));
             stopService(new Intent(getApplicationContext(), MainActivity.class));
-            android.os.Process.killProcess(android.os.Process.myPid()); // kicsit brutál, de nem találtam jobbat
+            int pid = android.os.Process.myPid();
+            android.os.Process.killProcess(pid); // kicsit brutál, de nem találtam jobbat
         }
         open = true;
         longClick = false;
@@ -49,31 +52,13 @@ public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
         longClick = true;
         try {
             Process process = Runtime.getRuntime().exec(IGOSAVERESET);
-//            String inpStream = readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
-//            String errStream = readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
-//            Log.d("OverlayShowingButtonServiceKi", errStream);
+            String inpStream = MainActivity.readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
+            String errStream = MainActivity.readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
+            Log.d("OverlayButtonServiceKi", errStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
         Toast.makeText(this, "KI hosszan nyomva: " + IGOSAVERESET, Toast.LENGTH_SHORT).show();
         return false;
     }
-//
-//public String readFullyAsString(InputStream inputStream, String encoding) throws IOException {
-//    return readFully(inputStream).toString(encoding);
-//}
-//
-//public byte[] readFullyAsBytes(InputStream inputStream) throws IOException {
-//    return readFully(inputStream).toByteArray();
-//}
-//
-//private ByteArrayOutputStream readFully(InputStream inputStream)  throws IOException {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        byte[] buffer = new byte[1024];
-//        int length = 0;
-//        while ((length = inputStream.read(buffer)) != -1) {
-//            baos.write(buffer, 0, length);
-//        }
-//        return baos;
-//    }
 }

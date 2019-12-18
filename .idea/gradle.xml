@@ -3,16 +3,20 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT" />
+        </compositeConfiguration>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication" />
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/bike" />
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carleft" />
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carmain" />
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/common" />
-            <option value="/opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/bike" />
+            <option value="$PROJECT_DIR$/carleft" />
+            <option value="$PROJECT_DIR$/carmain" />
+            <option value="$PROJECT_DIR$/changemap" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/sqlite-android-3230000" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

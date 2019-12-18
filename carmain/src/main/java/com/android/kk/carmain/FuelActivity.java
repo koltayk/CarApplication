@@ -1,12 +1,15 @@
 package com.android.kk.carmain;
 
+import android.Manifest;
 import android.app.Activity;
-
-import org.sqlite.database.sqlite.SQLiteDatabase;
-
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,7 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.kk.carapplication.MainActivity;
-import com.android.kk.carapplication.R;
+
+import org.sqlite.database.sqlite.SQLiteDatabase;
 
 import java.io.File;
 import java.io.Serializable;
@@ -33,7 +37,6 @@ public class FuelActivity extends Activity implements Serializable {
     public static final int MAXDIST = 70;
     public static final String TAG = FuelActivity.class.getSimpleName();
     public static final int GRAD_METER_FACTOR = 40000 / 360 * 1000;
-    public static FuelActivity activity;
 
     private class Station {
         public int id;
@@ -87,24 +90,46 @@ public class FuelActivity extends Activity implements Serializable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = this;
-        setContentView(com.android.kk.carapplication.R.layout.activity_fuel);
+        setContentView(R.layout.activity_fuel);
+
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastKnownLocation != null) {
+                long networkTS = lastKnownLocation.getTime();
+                Runtime.getRuntime().exec("busybox date -s @" + networkTS/1000);
+                latitude = lastKnownLocation.getLatitude();
+                longitude = lastKnownLocation.getLongitude();
+                Log.d(MainActivity.TAG, "LastKnownLocationTime: " + networkTS + ", latitude: " + latitude+ ", longitude: " + longitude);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         loadSqlite();
 //        MainActivity.activity.getTimeAndPos();
-        latitude = MainActivity.activity.getLatitude();
-        longitude = MainActivity.activity.getLongitude();
-        this.txtPart = (TextView) findViewById(com.android.kk.carapplication.R.id.txtPart);
-        this.txtStation = (TextView) findViewById(com.android.kk.carapplication.R.id.txtStation);
-        this.txtCountry = (EditText) findViewById(com.android.kk.carapplication.R.id.txtCountry);
-        this.txtPostCode = (TextView) findViewById(com.android.kk.carapplication.R.id.txtPostCode);
-        this.txtCity = (TextView) findViewById(com.android.kk.carapplication.R.id.txtCity);
-        this.txtStreet = (TextView) findViewById(com.android.kk.carapplication.R.id.txtStreet);
-        this.txtHouseNumber = (TextView) findViewById(com.android.kk.carapplication.R.id.txtHouseNumber);
-        this.txtLiter = (TextView) findViewById(com.android.kk.carapplication.R.id.txtLiter);
-        this.txtSum = (TextView) findViewById(com.android.kk.carapplication.R.id.txtSum);
-        this.txtPrice = (TextView) findViewById(com.android.kk.carapplication.R.id.txtPrice);
-        this.txtCurrency = (TextView) findViewById(com.android.kk.carapplication.R.id.txtCurrency);
+        this.txtPart = findViewById(R.id.txtPart);
+        this.txtStation = findViewById(R.id.txtStation);
+        this.txtCountry = findViewById(R.id.txtCountry);
+        this.txtPostCode = findViewById(R.id.txtPostCode);
+        this.txtCity = findViewById(R.id.txtCity);
+        this.txtStreet = findViewById(R.id.txtStreet);
+        this.txtHouseNumber = findViewById(R.id.txtHouseNumber);
+        this.txtLiter = findViewById(R.id.txtLiter);
+        this.txtSum = findViewById(R.id.txtSum);
+        this.txtPrice = findViewById(R.id.txtPrice);
+        this.txtCurrency = findViewById(R.id.txtCurrency);
 
         String fuelSql = "SELECT id, total FROM fueling WHERE ID=(SELECT MAX(id) FROM fueling);";
         Cursor fuelCursor = fuelDatabase.rawQuery(fuelSql, new String[0]);
@@ -120,7 +145,7 @@ public class FuelActivity extends Activity implements Serializable {
 
         createListeners(fuelCursor);
 
-        TextView date = (TextView) findViewById(com.android.kk.carapplication.R.id.txtDate);
+        TextView date = (TextView) findViewById(R.id.txtDate);
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         dateStr = df.format(new Date());
         date.setText(dateStr);
@@ -139,7 +164,7 @@ public class FuelActivity extends Activity implements Serializable {
             fillStationData(station);
         }
 
-        TextView position = (TextView) findViewById(com.android.kk.carapplication.R.id.txtPosition);
+        TextView position = (TextView) findViewById(R.id.txtPosition);
         position.setText(String.format("lat: %f, lon: %f,     távolság: %.2f m", latitude, longitude, dist));
         Log.d(TAG, "position: " + position.getText());
     }
@@ -147,7 +172,7 @@ public class FuelActivity extends Activity implements Serializable {
     private void createListeners(Cursor fuelCursor) {
         final int oldTotal = fuelCursor.getInt(1);
 
-        EditText txtTotal = (EditText) findViewById(com.android.kk.carapplication.R.id.txtTotal);
+        EditText txtTotal = (EditText) findViewById(R.id.txtTotal);
         txtTotal.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -401,14 +426,14 @@ public class FuelActivity extends Activity implements Serializable {
     @NonNull
     private void writeStation(Station station) {
         String stationSql = "INSERT INTO station (id, name, country, postcode, city, street, streetnumber, lat, lon) VALUES ("
-                + station.id +
-                "," + getStringEsc(station.name) +
-                "," + getStringEsc(station.country) +
-                "," + getStringEsc(station.postcode) +
-                "," + getStringEsc(station.city) +
-                "," + getStringEsc(station.street) +
-                "," + getStringEsc(station.houseNumber) +
-                "," + station.latitude + "," + station.longitude + ");";
+                + station.id
+                + getStringEsc(station.name, "", false)
+                + getStringEsc(station.country, "", false)
+                + getStringEsc(station.postcode, "", false)
+                + getStringEsc(station.city, "", false)
+                + getStringEsc(station.street, "", false)
+                + getStringEsc(station.houseNumber, "", false)
+                + station.latitude + "," + station.longitude + ");";
         fuelDatabase.execSQL(stationSql);
         foundStation = true;
     }
@@ -640,12 +665,13 @@ public class FuelActivity extends Activity implements Serializable {
             update = true;
         }
         if (update) {
-            String stationSql = "UPDATE station SET name = " + getStringEsc(station.name)
-                    + ", country = " + getStringEsc(station.country)
-                    + ", city = " + getStringEsc(station.city)
-                    + ", postcode = " + getStringEsc(station.postcode)
-                    + ", street = " + getStringEsc(station.street)
-                    + ", streetnumber = " + getStringEsc(station.houseNumber)
+            String stationSql = "UPDATE station SET "
+                    + getStringEsc(station.name, "name", true)
+                    + getStringEsc(station.country, "country", false)
+                    + getStringEsc(station.city, "city", false)
+                    + getStringEsc(station.postcode, "postcode", false)
+                    + getStringEsc(station.street, "street", false)
+                    + getStringEsc(station.houseNumber, "streetnumber", false)
                     + " WHERE id = " + station.id + ";";
             fuelDatabase.execSQL(stationSql);
         }
@@ -653,8 +679,12 @@ public class FuelActivity extends Activity implements Serializable {
     }
 
     @NonNull
-    private String getStringEsc(String name) {
-        return APOSTROF + name.replaceAll(APOSTROF, APOSTROF+APOSTROF) + APOSTROF;
+    private String getStringEsc(String value, String name, boolean first) {
+        if (value == null) {
+            return "";
+        }
+        String pref = (first? "": ", ") + (name.isEmpty()? "": name + " = ");
+        return pref +  APOSTROF + value.replaceAll(APOSTROF, APOSTROF+APOSTROF) + APOSTROF;
     }
 //
 //    @Override

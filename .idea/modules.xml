@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/CarApplication.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/CarApplication.iml" />
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/bike/bike.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/bike/bike.iml" />
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/carleft/carleft.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carleft/carleft.iml" />
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/carmain/carmain.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/carmain/carmain.iml" />
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/common/common.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/common/common.iml" />
-      <module fileurl="file:///opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000/sqlite-android-3230000.iml" filepath="/opt/old/home/kk/AndroidStudioProjects/CarApplication/sqlite-android-3230000/sqlite-android-3230000.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CarApplication.iml" filepath="$PROJECT_DIR$/CarApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bike/bike.iml" filepath="$PROJECT_DIR$/bike/bike.iml" />
+      <module fileurl="file://$PROJECT_DIR$/carleft/carleft.iml" filepath="$PROJECT_DIR$/carleft/carleft.iml" />
+      <module fileurl="file://$PROJECT_DIR$/carmain/carmain.iml" filepath="$PROJECT_DIR$/carmain/carmain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/changemap/changemap.iml" filepath="$PROJECT_DIR$/changemap/changemap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sqlite-android-3230000/sqlite-android-3230000.iml" filepath="$PROJECT_DIR$/sqlite-android-3230000/sqlite-android-3230000.iml" />
     </modules>
   </component>
 </project>
