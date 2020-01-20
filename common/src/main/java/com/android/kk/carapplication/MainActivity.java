@@ -1,14 +1,18 @@
 package com.android.kk.carapplication;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -34,9 +38,9 @@ public class MainActivity extends Activity implements Serializable {
 
     private List<OverlayShowingButtonServiceMulti> multiButtons = new ArrayList<>();
 
-    private double latitude;
+    protected double latitude;
 
-    private double longitude;
+    protected double longitude;
 
     public double getLatitude() {
         return latitude;
@@ -60,6 +64,15 @@ public class MainActivity extends Activity implements Serializable {
 
     public List<OverlayShowingButtonServiceMulti> getMultiButtons() {
         return multiButtons;
+    }
+
+    protected void checkPermission(String permission, int callBack) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            // If permission is not granted, ask it.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    callBack);
+        }
     }
 
     /**

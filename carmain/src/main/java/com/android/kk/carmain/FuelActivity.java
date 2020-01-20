@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,12 +32,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class FuelActivity extends Activity implements Serializable {
+public class FuelActivity extends MainActivity implements Serializable {
 
     public static final String APOSTROF = "'";
     public static final int MAXDIST = 70;
     public static final String TAG = FuelActivity.class.getSimpleName();
     public static final int GRAD_METER_FACTOR = 40000 / 360 * 1000;
+    public static final String BENZIN_SQLITE = "/sdcard/benzin.sqlite";
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     private class Station {
         public int id;
@@ -63,6 +66,7 @@ public class FuelActivity extends Activity implements Serializable {
     }
 
 
+    private String filesDir;
     private SQLiteDatabase fuelDatabase;
     private SQLiteDatabase poiDatabase;
     private TextView txtPart;
@@ -84,25 +88,23 @@ public class FuelActivity extends Activity implements Serializable {
     private boolean foundStation = false;
     private Double liter;
     private Double sum;
-    private double latitude;
-    private double longitude;
+//    private double latitude;
+//    private double longitude;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.filesDir = getFilesDir().getPath() + "/";
         setContentView(R.layout.activity_fuel);
 
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
                 return;
             }
             Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -116,6 +118,31 @@ public class FuelActivity extends Activity implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
+
 
         loadSqlite();
 //        MainActivity.activity.getTimeAndPos();
@@ -318,7 +345,7 @@ public class FuelActivity extends Activity implements Serializable {
             sqliteVersion = cursorV.getString(0);
             Log.d(TAG, "sqliteVersion: " + sqliteVersion);
         }
-        this.fuelDatabase = SQLiteDatabase.openDatabase("/sdcard/benzin.sqlite", null, SQLiteDatabase.OPEN_READWRITE);
+        this.fuelDatabase = SQLiteDatabase.openDatabase(BENZIN_SQLITE, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
     /**

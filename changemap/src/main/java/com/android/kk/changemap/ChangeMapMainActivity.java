@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChangeMapMainActivity extends AppCompatActivity implements ChangeMapDialogFragment.NoticeDialogListener{
+public class ChangeMapMainActivity extends MainActivity implements ChangeMapDialogFragment.NoticeDialogListener{
 
     public static final String SEP = "_";
 
@@ -53,7 +53,7 @@ public class ChangeMapMainActivity extends AppCompatActivity implements ChangeMa
     private String fileName = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_map_main);
 
@@ -123,15 +123,6 @@ public class ChangeMapMainActivity extends AppCompatActivity implements ChangeMa
 //	    	Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 //			toast.show();
 //	    }
-    }
-
-    private void checkPermission(String permission, int callBack) {
-        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            // If permission is not granted, ask it.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    callBack);
-        }
     }
 
     private void changeSysTxt(String fileName) {

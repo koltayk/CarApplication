@@ -31,7 +31,7 @@ public class OverlayShowingButtonServiceNavi extends OverlayShowingButtonService
         buttons.add(new OverlayShowingButton(this, "waze", 610, 310, PACKAGE_NAME_WAZE, View.GONE));
 //        buttons.add(new OverlayShowingButton(this, "primo", 610, 460, PACKAGE_NAME_PRIMO, View.GONE));
         buttons.add(new OverlayShowingButton(this, "pal", 610, 390, PACKAGE_NAME_PAL, View.GONE));
-        buttons.add(new OverlayShowingButton(this, "avic", 610, 470, PACKAGE_NAME_AVIC, View.VISIBLE));
+//        buttons.add(new OverlayShowingButton(this, "avic", 610, 470, PACKAGE_NAME_AVIC, View.VISIBLE));
         Log.d(MainActivity.TAG, "OverlayShowingButtonServiceNavi.createButtons() end");
     }
 
