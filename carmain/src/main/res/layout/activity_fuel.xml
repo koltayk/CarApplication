@@ -4,251 +4,299 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <TableLayout
+    <LinearLayout
+        android:id="@+id/tableRowDate"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TableRow
-            android:id="@+id/tableRowDate"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblDate" />
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblDate" />
-
-                <TextView
-                    android:id="@+id/txtDate"
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRowDistance"
+        <TextView
+            android:id="@+id/txtDate"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblTotal" />
+    <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-                <EditText
-                    android:id="@+id/txtTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:gravity="right"
-                    android:textAlignment="gravity"
-                    android:ems="10" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblPart" />
-
-                <TextView
-                    android:id="@+id/txtPart"
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:textAlignment="gravity" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/lblKilometer" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRowConsum"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblTotal" />
 
-                <EditText
-                    android:id="@+id/txtLiter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:inputType="numberDecimal"
-                    android:gravity="right"
-                    android:textAlignment="gravity" />
+        <EditText
+            android:id="@+id/txtTotal"
+            android:textSize="14sp"
+            android:layout_width="70sp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:ems="10" />
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/lblLiter" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblSum" />
-
-                <EditText
-                    android:id="@+id/txtSum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:gravity="right"
-                    android:textAlignment="gravity"
-                    android:ems="10" />
-
-                <EditText
-                    android:id="@+id/currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRowStation"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text="@string/lblPart" />
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblStation" />
+        <TextView
+            android:id="@+id/txtPart"
+            android:textSize="14sp"
+            android:layout_width="40sp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textAlignment="gravity" />
 
-                <EditText
-                    android:id="@+id/txtStation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblCountry" />
-
-                <EditText
-                    android:id="@+id/txtCountry"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.10"
-                    android:ems="10" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRowAddress"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:text="@string/lblKilometer" />
+    </LinearLayout>
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblPostCode" />
+    <LinearLayout
+        android:id="@+id/tableRowConsum"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-                <EditText
-                    android:id="@+id/txtPostCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.20"
-                    android:ems="10" />
+        <EditText
+            android:id="@+id/txtLiter"
+            android:textSize="14sp"
+            android:layout_width="50sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:inputType="numberDecimal"
+            android:gravity="right"
+            android:textAlignment="gravity" />
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblCity" />
-
-                <EditText
-                    android:id="@+id/txtCity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.10"
-                    android:ems="10" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblStreet" />
-
-                <EditText
-                    android:id="@+id/txtStreet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.30"
-                    android:ems="10" />
-
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblHouseNumber" />
-
-                <EditText
-                    android:id="@+id/txtHouseNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.10"
-                    android:ems="10" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tablePosition"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/lblLiter" />
+    </LinearLayout>
 
-                <TextView
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/lblPosition" />
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-                <TextView
-                    android:id="@+id/txtPosition"
-                    android:textSize="20sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableButtons"
+        <TextView
+            android:textSize="14sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblSum" />
 
-                <Button
-                    android:id="@+id/btnSubmit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/submit"
-                    android:onClick="onClickSubmit" />
+        <EditText
+            android:id="@+id/txtSum"
+            android:textSize="14sp"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:gravity="right"
+            android:textAlignment="gravity"
+            android:ems="10" />
 
-                <Button
-                    android:id="@+id/btnCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cancel"
-                    android:onClick="onClickCancel" />
-        </TableRow>
+        <EditText
+            android:id="@+id/txtCurrency"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
 
-    </TableLayout>
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="@string/lblPrice" />
+
+        <TextView
+            android:id="@+id/txtPrice"
+            android:textSize="14sp"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textAlignment="gravity" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tableRowStation"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblStation" />
+
+        <EditText
+            android:id="@+id/txtStation"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:ems="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblCountry" />
+        <Spinner
+            android:id="@+id/country"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tableRowAddress"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblPostCode" />
+
+        <EditText
+            android:id="@+id/txtPostCode"
+            android:textSize="14sp"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:ems="10" />
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblCity" />
+
+        <EditText
+            android:id="@+id/txtCity"
+            android:textSize="14sp"
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:ems="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblStreet" />
+
+        <EditText
+            android:id="@+id/txtStreet"
+            android:textSize="14sp"
+            android:layout_width="250sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:ems="10" />
+
+        <TextView
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblHouseNumber" />
+
+        <EditText
+            android:id="@+id/txtHouseNumber"
+            android:textSize="14sp"
+            android:layout_width="50sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:ems="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tablePosition"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lblPosition" />
+
+        <TextView
+            android:id="@+id/txtPosition"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tableButtons"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:textSize="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/submit"
+            android:onClick="onClickSubmit" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:textSize="50sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:onClick="onClickCancel" />
+    </LinearLayout>
 </LinearLayout>

@@ -15,7 +15,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +30,16 @@ import org.sqlite.database.sqlite.SQLiteDatabase;
 import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class FuelActivity extends MainActivity implements Serializable {
+public class FuelActivity extends MainActivity implements Serializable, AdapterView.OnItemSelectedListener {
 
     public static final String APOSTROF = "'";
     public static final int MAXDIST = 70;
@@ -71,7 +78,7 @@ public class FuelActivity extends MainActivity implements Serializable {
     private SQLiteDatabase poiDatabase;
     private TextView txtPart;
     private TextView txtStation;
-    private EditText txtCountry;
+//    private EditText txtCountry;
     private TextView txtPostCode;
     private TextView txtCity;
     private TextView txtStreet;
@@ -88,6 +95,9 @@ public class FuelActivity extends MainActivity implements Serializable {
     private boolean foundStation = false;
     private Double liter;
     private Double sum;
+    private Spinner country;
+    private final Map<String, String> countryList = new LinkedHashMap<>();
+
 //    private double latitude;
 //    private double longitude;
 
@@ -148,7 +158,7 @@ public class FuelActivity extends MainActivity implements Serializable {
 //        MainActivity.activity.getTimeAndPos();
         this.txtPart = findViewById(R.id.txtPart);
         this.txtStation = findViewById(R.id.txtStation);
-        this.txtCountry = findViewById(R.id.txtCountry);
+        this.country = findViewById(R.id.country);
         this.txtPostCode = findViewById(R.id.txtPostCode);
         this.txtCity = findViewById(R.id.txtCity);
         this.txtStreet = findViewById(R.id.txtStreet);
@@ -177,7 +187,7 @@ public class FuelActivity extends MainActivity implements Serializable {
         dateStr = df.format(new Date());
         date.setText(dateStr);
 
-        txtCurrency.setText("€");
+//        txtCurrency.setText("€");
 
         double dist = findStation(latitude, longitude);
         if (dist > MAXDIST) {    // nincs a programm által ismertek között
@@ -194,6 +204,19 @@ public class FuelActivity extends MainActivity implements Serializable {
         TextView position = (TextView) findViewById(R.id.txtPosition);
         position.setText(String.format("lat: %f, lon: %f,     távolság: %.2f m", latitude, longitude, dist));
         Log.d(TAG, "position: " + position.getText());
+
+        String countrySql = "SELECT code, currency FROM country ORDER BY code;";
+        Cursor countryCursor = fuelDatabase.rawQuery(countrySql, new String[0]);
+        while (countryCursor.moveToNext()) {
+            String code = countryCursor.getString(0);
+            String currency = countryCursor.getString(1);
+            countryList.put(code, currency);
+        }
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, new ArrayList(countryList.keySet()));
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        country.setAdapter(aa);
+        country.setOnItemSelectedListener(this);
     }
 
     private void createListeners(Cursor fuelCursor) {
@@ -255,34 +278,21 @@ public class FuelActivity extends MainActivity implements Serializable {
             public void afterTextChanged(Editable s) {}
         });
 
-        txtCountry.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String nm = s.toString();
-                String nmUpper = nm.toUpperCase();
-                if (nm.equals(nmUpper)) {
-                    if (s.length() > 0) {
-                        String fuelSql = "SELECT currency FROM country WHERE code='" + nm + "';";
-                        Cursor fuelCursor = fuelDatabase.rawQuery(fuelSql, new String[0]);
-                        while (fuelCursor.moveToNext()) {
-                            String currency = fuelCursor.getString(0);
-                            txtCurrency.setText(currency);
-                            writePrice();
-                        }
-                    }
-                }
-                else {
-                    txtCountry.setText(nmUpper);
-                    txtCountry.setSelection(txtCountry.getText().length());
-                }
-            }
+    }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    //Performing action onItemSelected and onNothing selected
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position,long id) {
+        Object countryCode = country.getAdapter().getItem(position);
+        txtCurrency.setText(countryList.get(countryCode));
+        writePrice();
+    }
 
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        txtCurrency.setText("");
+        writePrice();
+
     }
 
     private void writePrice() {
@@ -408,10 +418,16 @@ public class FuelActivity extends MainActivity implements Serializable {
         txtHouseNumber.setText(station.houseNumber);
         txtPostCode.setText(station.postcode);
         if (station.country != null && !station.country.isEmpty()) {
-            txtCountry.setText(station.country);
-        String fuelSql = "SELECT currency FROM country WHERE code = '" + station.country + "';";
-        Cursor fuelCursor = fuelDatabase.rawQuery(fuelSql, new String[0]);
-        fuelCursor.moveToNext();
+            SpinnerAdapter adapter = country.getAdapter();
+            for (int i=0; i < adapter.getCount(); i++) {
+                Object item = adapter.getItem(i);
+                if (item.equals(station.country)) {
+                    country.setSelection(i);
+                }
+            }
+            String fuelSql = "SELECT currency FROM country WHERE code = '" + station.country + "';";
+            Cursor fuelCursor = fuelDatabase.rawQuery(fuelSql, new String[0]);
+            fuelCursor.moveToNext();
             String currency = fuelCursor.getString(0);
             ((TextView) findViewById(R.id.txtCurrency)).setText(currency);
         }
@@ -450,7 +466,6 @@ public class FuelActivity extends MainActivity implements Serializable {
         }
     }
 
-    @NonNull
     private void writeStation(Station station) {
         String stationSql = "INSERT INTO station (id, name, country, postcode, city, street, streetnumber, lat, lon) VALUES ("
                 + station.id
@@ -460,7 +475,7 @@ public class FuelActivity extends MainActivity implements Serializable {
                 + getStringEsc(station.city, "", false)
                 + getStringEsc(station.street, "", false)
                 + getStringEsc(station.houseNumber, "", false)
-                + station.latitude + "," + station.longitude + ");";
+                + "," + station.latitude + "," + station.longitude + ");";
         fuelDatabase.execSQL(stationSql);
         foundStation = true;
     }
@@ -520,7 +535,7 @@ public class FuelActivity extends MainActivity implements Serializable {
 
         try {
             String name = getText(this.txtStation);
-            String country = getText(this.txtCountry);
+            String country = (String) this.country.getSelectedItem();
             String postcode = getText(this.txtPostCode);
             String city = getText(this.txtCity);
             String street = getText(this.txtStreet);
@@ -564,8 +579,8 @@ public class FuelActivity extends MainActivity implements Serializable {
     }
 
     @NonNull
-    private String getText(TextView txtHouseNumber) {
-        CharSequence text = txtHouseNumber.getText();
+    private String getText(TextView textView) {
+        CharSequence text = textView.getText();
         if (text == null) {
             return null;
         }
