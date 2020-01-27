@@ -20,7 +20,21 @@
         <TextView
             android:id="@+id/txtDate"
             android:textSize="14sp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="@string/lblOldkm" />
+
+        <TextView
+            android:id="@+id/txtOldkm"
+            android:textSize="14sp"
+            android:layout_marginLeft="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -91,52 +105,45 @@
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="2dp"
             android:text="@string/lblLiter" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
 
         <TextView
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:text="@string/lblSum" />
 
         <EditText
             android:id="@+id/txtSum"
             android:textSize="14sp"
-            android:layout_width="60sp"
+            android:layout_width="50sp"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:gravity="right"
-            android:textAlignment="gravity"
-            android:ems="10" />
+            android:textAlignment="gravity" />
 
-        <EditText
+        <TextView
             android:id="@+id/txtCurrency"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="2dp" />
 
         <TextView
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="15dp"
             android:text="@string/lblPrice" />
 
         <TextView
             android:id="@+id/txtPrice"
             android:textSize="14sp"
-            android:layout_width="60sp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="3dp"
             android:textAlignment="gravity" />
     </LinearLayout>
 
@@ -173,8 +180,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="@string/lblCountry" />
-        <Spinner
-            android:id="@+id/country"
+        <TextView
+            android:id="@+id/txtCountry"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

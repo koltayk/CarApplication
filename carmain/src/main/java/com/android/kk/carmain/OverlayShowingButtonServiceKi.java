@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.kk.carapplication.CmdRet;
 import com.android.kk.carapplication.MainActivity;
 import com.android.kk.carapplication.OverlayShowingButton;
 import com.android.kk.carapplication.OverlayShowingButtonServiceMulti;
@@ -51,11 +52,10 @@ public class OverlayShowingButtonServiceKi extends OverlayShowingButtonService {
     public boolean onLongClick(View v) {
         longClick = true;
         try {
-            Process process = Runtime.getRuntime().exec(IGOSAVERESET);
-            String inpStream = MainActivity.readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
-            String errStream = MainActivity.readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
-            Log.d("OverlayButtonServiceKi", errStream);
-        } catch (IOException e) {
+            final CmdRet cmdRet = new CmdRet();
+            MainActivity.cmd("su", IGOSAVERESET, cmdRet, false);
+            Log.d("OverlayButtonServiceKi", cmdRet.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Toast.makeText(this, "KI hosszan nyomva: " + IGOSAVERESET, Toast.LENGTH_SHORT).show();

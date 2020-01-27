@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements Serializable {
 //
     /** code to post/handler request for permission */
     public final static int REQUEST_CODE = -1010101;
+    public static final String MOUNT_SDA = "/data/misc/user/bin/mountSDA.sh";
 
     public static MainActivity activity;
 
@@ -123,24 +124,26 @@ public class MainActivity extends Activity implements Serializable {
         }
     }
 
-    public static String cmd(String sh, String command, boolean ignoreError) throws IOException, InterruptedException {
+    public static void cmd(String sh, String command, CmdRet cmdRet, boolean ignoreError) throws IOException, InterruptedException {
         Log.d(TAG, command);
         Process process = Runtime.getRuntime().exec(new String[]{sh, "-c", command});
         process.waitFor();
-        String errStream = readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
-        String outStream = readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
-        Log.d(TAG, outStream);
-        Log.d(TAG, errStream);
-        final int exitValue = process.exitValue();
-        if (exitValue != 0 && !ignoreError) {
-            throw new RuntimeException("hiba a következő parancsban: " + command + ", hibaüzenet: " + errStream);
+        cmdRet.errStream = readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
+        cmdRet.outStream = readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
+        Log.d(TAG, cmdRet.outStream);
+        Log.d(TAG, cmdRet.errStream);
+        cmdRet.exitValue = process.exitValue();
+        if (cmdRet.exitValue != 0 && !ignoreError) {
+            throw new RuntimeException("hiba a következő parancsban: " + command + ", hibaüzenet: " + cmdRet.errStream);
         }
-        String ret = exitValue + " " + outStream + errStream;
-        return ret;
+//        String ret = exitValue + " " + outStream + errStream;
+//        return ret;
     }
 
-    public static String mountSda() throws IOException, InterruptedException {
-        return cmd("su", "/data/misc/user/bin/mountSDA.sh", false);
+    public static CmdRet mountSda() throws IOException, InterruptedException {
+        final CmdRet cmdRet = new CmdRet();
+        cmd("su", MOUNT_SDA, cmdRet, false);
+        return cmdRet;
     }
 
     public static String readFullyAsString(InputStream inputStream, String encoding) throws IOException {

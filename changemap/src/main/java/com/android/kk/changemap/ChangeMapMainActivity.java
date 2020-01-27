@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.kk.carapplication.CmdRet;
 import com.android.kk.carapplication.MainActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -61,18 +62,16 @@ public class ChangeMapMainActivity extends MainActivity implements ChangeMapDial
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 
         try {
-            Process process = Runtime.getRuntime().exec(FIND_IGO_SYSTXT);
-            String inpStream = MainActivity.readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
-            String errStream = MainActivity.readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
-            Log.d(MainActivity.TAG, inpStream);
-            Log.d(MainActivity.TAG, errStream);
-            String[] split = inpStream.split("\n");
+
+            final CmdRet cmdRet = new CmdRet();
+            MainActivity.cmd("su", FIND_IGO_SYSTXT, cmdRet, false);
+            String[] split = cmdRet.outStream.split("\n");
             for (String line: split) {
                 if (line.startsWith(STORAGE)) {
                     changeSysTxt(line);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

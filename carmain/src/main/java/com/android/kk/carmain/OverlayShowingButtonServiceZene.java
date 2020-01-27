@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.kk.carapplication.CmdRet;
 import com.android.kk.carapplication.MainActivity;
 import com.android.kk.carapplication.OverlayShowingButton;
 import com.android.kk.carapplication.OverlayShowingButtonServiceMulti;
@@ -34,14 +35,15 @@ public class OverlayShowingButtonServiceZene extends OverlayShowingButtonService
     public boolean openApp(OverlayShowingButton overlayShowingButton) {
         boolean ret = super.openApp(overlayShowingButton);
         if (ret) {
-            try {  // /dev/block/sda csatolása
-                String cmdRet = MainActivity.mountSda();
-                Toast.makeText(this, "/data/misc/user/bin/mountSDA.sh return: " + cmdRet, Toast.LENGTH_SHORT).show();
+            try {
+//                cmdRet = MainActivity.mountSda();  // /dev/block/sda csatolása
+//                Toast.makeText(this, MainActivity.MOUNT_SDA + " return: " + cmdRet, Toast.LENGTH_SHORT).show();
 
                 for (OverlayShowingButton button: buttons) {
                     if (button != overlayShowingButton && overlayShowingButton.isKillable() && button.isKillable()) {
                             {  // csak a zenét leállítani még jobb lenne
-                                cmdRet = MainActivity.cmd("su", "/data/misc/user/bin/killall.sh", false);
+                                final CmdRet cmdRet = new CmdRet();
+                                MainActivity.cmd("su", "/data/misc/user/bin/killall.sh", cmdRet,false);
                                 Log.d(MainActivity.TAG, "process killall exitValue: " + button.getAppPackageName() + " " + cmdRet);
                             }
                     }

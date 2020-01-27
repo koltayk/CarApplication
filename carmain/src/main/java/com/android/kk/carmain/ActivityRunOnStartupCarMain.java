@@ -16,11 +16,11 @@ public class ActivityRunOnStartupCarMain extends ActivityRunOnStartup {
         Log.d(MainActivity.TAG, "ActivityRunOnStartupCarMain");
         mainActivityClass = CarMainActivity.class;
         super.onReceive(context, intent);
-        try {
-            String cmdRet = MainActivity.mountSda();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String cmdRet = MainActivity.mountSda();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

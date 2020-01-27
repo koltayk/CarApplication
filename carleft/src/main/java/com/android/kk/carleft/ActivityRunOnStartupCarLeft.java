@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.android.kk.carapplication.ActivityRunOnStartup;
+import com.android.kk.carapplication.CmdRet;
 import com.android.kk.carapplication.MainActivity;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ public class ActivityRunOnStartupCarLeft extends ActivityRunOnStartup {
         super.onReceive(context, intent);
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             try {
-                MainActivity.cmd("su", PowerConnectionReceiver.halt + ".sh", false);
+                final CmdRet cmdRet = new CmdRet();
+                MainActivity.cmd("su", PowerConnectionReceiver.halt + ".sh", cmdRet, false);
             } catch (Exception e) {
                 e.printStackTrace();
             }

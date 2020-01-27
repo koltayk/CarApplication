@@ -1,21 +1,22 @@
 <resources>
     <string name="app_name">Car Application</string>
     <string name="action_settings">Settings</string>
-    <string name="lblDate">időpont</string>
-    <string name="lblTotal">összes km</string>
-    <string name="lblPart">résztáv</string>
+    <string name="lblDate">időpont:</string>
+    <string name="lblTotal">összes km:</string>
+    <string name="lblPart">résztáv:</string>
     <string name="lblLiter">liter</string>
     <string name="lblKilometer">km</string>
-    <string name="lblSum">összeg</string>
-    <string name="lblValuta">pénznem</string>
-    <string name="lblPosition">hely</string>
-    <string name="lblStation">benzinkút</string>
+    <string name="lblSum">összeg:</string>
+    <string name="lblValuta">pénznem:</string>
+    <string name="lblPosition">hely:</string>
+    <string name="lblStation">benzinkút:</string>
     <string name="submit">OK</string>
     <string name="cancel">kilép</string>
-    <string name="lblCountry">ország</string>
-    <string name="lblPostCode">irányítószám</string>
-    <string name="lblCity">település</string>
-    <string name="lblStreet">utca</string>
-    <string name="lblHouseNumber">házszám</string>
-    <string name="lblPrice">ár</string>
+    <string name="lblCountry">ország:</string>
+    <string name="lblPostCode">irányítószám:</string>
+    <string name="lblCity">település:</string>
+    <string name="lblStreet">utca:</string>
+    <string name="lblHouseNumber">házszám:</string>
+    <string name="lblPrice">ár:</string>
+    <string name="lblOldkm">régi km-állás:</string>
 </resources>

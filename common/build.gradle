@@ -36,4 +36,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(':sqlite-android-3230000')
+//    implementation 'org.locationtech.jts:jts-core:1.15.1'
+    api 'org.locationtech.jts:jts-core:1.15.1'
 }

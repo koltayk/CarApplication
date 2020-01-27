@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class CarMainActivity extends MainActivity {
-    private static final String MOUNT_SD = "/data/misc/user/bin/mountExtSD.sh";
+    private static final String MOUNT_SD = "/data/misc/user/bin/mountExtSD.sh1";
 
 //    private ThinBTHFPClient thinBTClient;
 
@@ -33,12 +33,9 @@ public class CarMainActivity extends MainActivity {
 //            while(s.hasNextLine()){
 //                Log.d(MainActivity.TAG, s.nextLine()); // will give the process output
 //            }
-            Process process = Runtime.getRuntime().exec(new String[]{"su", "-c", MOUNT_SD});
-            String errStream = readFullyAsString(process.getErrorStream(), Charset.defaultCharset().name());
-            String inpStream = readFullyAsString(process.getInputStream(), Charset.defaultCharset().name());
-            Log.d(MainActivity.TAG, inpStream);
-            Log.d(MainActivity.TAG, errStream);
-        } catch (IOException e) {
+//            String cmdRet = MainActivity.mountSda();  // /dev/block/sda csatolása
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         startService(OverlayShowingButtonServiceZene.class);
